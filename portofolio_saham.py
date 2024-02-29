@@ -30,6 +30,7 @@ data00 = pd.DataFrame()
 data00['ALHC'] = data01['Adj Close']
 data00['CELH'] = data02['Adj Close']
 data00['FLNC'] = data03['Adj Close']
+data00.index = pd.to_datetime(data00.index)
 
 # Return saham harian
 r = data00.pct_change().dropna()
@@ -165,6 +166,7 @@ with tab4:
 
     ## Parameter-model
     return_daily = data00['porto'].pct_change().dropna()
+    return_daily.index = pd.to_datetime(return_daily.index)
     expected_return = return_daily.mean()
     var = return_daily.var()
     drift = expected_return - (0.5 * var) # tingkat drift harian (sesuai dengan data historis)
