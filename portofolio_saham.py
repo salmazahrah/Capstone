@@ -21,20 +21,20 @@ with st.sidebar:
     st.write("Salma Fitria F Z")
 
 # Tentukan tanggal awal
-start_date = '2022-01-01'
+start_date = '2020-01-01'
 end_date = '2024-01-01'
 
 # Menggunakan fungsi DataReader dari yfinance
 data01 = yf.download("BBRI.JK", start=start_date, end=end_date)
 data02 = yf.download("BBNI.JK", start=start_date, end=end_date)
-data03 = yf.download("BRIS.JK", start=start_date, end=end_date)
+data03 = yf.download("BMRI.JK", start=start_date, end=end_date)
 
 
 # Inisialisasi DataFrame
 data00 = pd.DataFrame()
 data00['BBRI.JK'] = data01['Adj Close']
 data00['BBNI.JK'] = data02['Adj Close']
-data00['BRIS.JK'] = data03['Adj Close']
+data00['BMRI.JK'] = data03['Adj Close']
 
 data00.index = pd.to_datetime(data00.index)
 
@@ -42,7 +42,7 @@ data00.index = pd.to_datetime(data00.index)
 r = data00.pct_change().dropna()
 returns_bbri = r['BBRI.JK']
 returns_bbni = r['BBNI.JK']
-returns_bris = r['BRIS.JK']
+returns_bmri = r['BMRI.JK']
     
 ########## Perhitungan Parameter
 # BBRI
@@ -51,28 +51,19 @@ xi_bbri, mu_bbri, beta_bbri = gev_bbriarams_mle_bbri
 # BBNI
 gev_bbniarams_mle_bbni = genextreme.fit(returns_bbni)
 xi_bbni, mu_bbni, beta_bbni = gev_bbniarams_mle_bbni
-# BRIS
-gev_brisarams_mle_bris = genextreme.fit(returns_bris)
-xi_bris, mu_bris, beta_bris = gev_brisarams_mle_bris
+# BMRI
+gev_bmriarams_mle_bmri = genextreme.fit(returns_bmri)
+xi_bmri, mu_bmri, beta_bmri = gev_bmriarams_mle_bmri
 
-########## Perhitungan iterasi dan Simulasi Monte Carlo
+########## Perhitungan iterasi
 alpha = 0.05
-z_score = 1.96  # Z-score untuk tingkat kepercayaan 95%
+# z_score = 1.96  # Z-score untuk tingkat kepercayaan 95%
 # BBRI
-std_dev_bbri = np.std(returns_bbri)
-mean_bbri = np.mean(returns_bbri)
 iterations_bbri = 2*len(returns_bbri)
-# iterations_bbri = ((100 * z_score * std_dev_bbri) / (5 * mean_bbri))**2
 # BBNI
-std_dev_bbni = np.std(returns_bbni)
-mean_bbni = np.mean(returns_bbni)
 iterations_bbni = 2*len(returns_bbni)
-# iterations_bbni = ((100 * z_score * std_dev_bbni) / (5 * mean_bbni))**2
-# BRIS
-std_dev_bris = np.std(returns_bris)
-mean_bris = np.mean(returns_bris)
-iterations_bris = 2*len(returns_bris)
-# iterations_bris = ((100 * z_score * std_dev_bris) / (5 * mean_bris))**2
+# BMRI
+iterations_bmri = 2*len(returns_bmri)
 
 ########### Simulasi Monte Carlo
 np.random.seed(42)
@@ -88,8 +79,8 @@ def monte_carlo_simulation_genextreme(xi, mu, beta, returns, iterations):
 BBRI = monte_carlo_simulation_genextreme(xi_bbri, mu_bbri, beta_bbri, returns_bbri, int(iterations_bbri))
 # BBNI
 BBNI = monte_carlo_simulation_genextreme(xi_bbni, mu_bbni, beta_bbni, returns_bbni, int(iterations_bbni))
-# BRIS
-BRIS = monte_carlo_simulation_genextreme(xi_bris, mu_bris, beta_bris, returns_bris, int(iterations_bris))
+# BMRI
+BMRI = monte_carlo_simulation_genextreme(xi_bmri, mu_bmri, beta_bmri, returns_bmri, int(iterations_bmri))
 
 
 st.title("Estimasi Resiko Portofolio Saham")
@@ -105,7 +96,7 @@ def format_big_number(num):
         return f"{num:.2f}"
     
 ###### Tabbing plot saham
-tab1, tab2, tab3, tab4 = st.tabs(['PORTOFOLIO','Daily Return', 'Matriks Korelasi', 'Simulasi'])
+tab1, tab2, tab3, tab4 = st.tabs(['Saham','Daily Return', 'Matriks Korelasi', 'Simulasi'])
 
 with tab1:
     with st.expander("Data Harga Closing Saham"):
@@ -115,11 +106,11 @@ with tab1:
     st.write("Grafik Harga Closing Saham")
     data = st.multiselect(
         "Pilih Saham",
-        ['BBRI.JK','BBNI.JK','BRIS.JK'],
+        ['BBRI.JK','BBNI.JK','BMRI.JK'],
         key="multiselect_1"
         )
     selected_data = data00[data].reset_index()
-    line_chart = px.line(selected_data, x='Date', y=data, title='Line Plot Harga Closing Saham Terpilih')
+    line_chart = px.line(selected_data, x='Date', y=data, title='Grafik Harga Closing Saham Terpilih')
     st.plotly_chart(line_chart)
     
     st.write("Statistika Deskriptif")
@@ -130,11 +121,11 @@ with tab2:
     st.write(r)
     data2 = st.multiselect(
         "Pilih Saham",
-        ['BBRI.JK','BBNI.JK','BRIS.JK'],
+        ['BBRI.JK','BBNI.JK','BMRI.JK'],
         key="multiselect_2"
     )
     returns = r[data2].reset_index()
-    line_chart = px.line(returns, x='Date', y=data2, title='Line Plot Return Harian Saham Terpilih')
+    line_chart = px.line(returns, x='Date', y=data2, title='Grafik Return Harian Saham Terpilih')
     st.plotly_chart(line_chart)
     
 with tab3:
@@ -178,44 +169,35 @@ with tab3:
 
     st.markdown("__Matrix Korelasi__")
     st.write("""
-        Dengan menggunakan matriks korelasi, kita dapat melihat hubungan antara harga penutupan saham
-        1. Dapat dilihat bahwa nilai korelasi saham BBNI.JK dengan BRIS.JK bernilai positif 0.24, ini menunjukkan bahwa saham BBNI.JK dan BRIS.JK memiiki hubungan yang lemah
-        2. Dapat dilihat bahwa nilai korelasi saham BBRI.JK dengan BBNI.JK bernilai positif 0.43, ini menujukkan bahwa saham BBRI.JK dan BBNI.JK memiliki hubungan yang sedang
-        3. Dapat dilihat bahwa nilai korelasi saham BBRI.JK dengan BBRIS.JK bernilai positif 0.70, ini menujukkan bahwa saham BBRI.JK dan BBNI.JK memiliki hubungan yang kuat
+        Dengan menggunakan matriks korelasi, kita dapat melihat bahwa ketiga saham memiliki korelasi positif yang kuat
     """)    
     
 with tab4:
-    st.write("Simulasi")
     # Proporsi Saham pada Portofolio
-    p_bbri = 0.33
-    p_bbni = 0.51
-    p_bris = 0.16
-
-    data00['porto'] = ((p_bbri * data00['BBRI.JK']) + (p_bbni * data00['BBNI.JK']) + (p_bris * data00['BRIS.JK']))    
-    r['PORTOFOLIO'] = data00['porto'].pct_change().dropna()
-    returns_porto = r['PORTOFOLIO']
+    p_bbri = 0.41
+    p_bbni = 0.25
+    p_bmri = 0.34
+    r['porto'] = ((p_bbri * r['BBRI.JK']) + (p_bbni * r['BBNI.JK']) + (p_bmri * r['BMRI.JK']))    
+    returns_porto = r['porto']
 
     gev_params_mle_porto = genextreme.fit(returns_porto)
     xi_porto, mu_porto, beta_porto = gev_params_mle_porto
-
-    # Perhitungan iterasi
-    std_dev_porto = np.std(returns_porto)
-    mean_porto = np.mean(returns_porto)
     iterations_porto = 2*len(returns_porto)
-    # iterations_porto = ((100 * z_score * std_dev_porto) / (5 * mean_porto))**2
 
     # Simulasi Monte Carlo
     np.random.seed(42)
     PORTOFOLIO = monte_carlo_simulation_genextreme(xi_porto, mu_porto, beta_porto, returns_porto, int(iterations_porto))
-
-    # investasi_awal = 100000000
-    # hasil_bbri = investasi_awal * BBRI
-    # hasil_bbni = investasi_awal * BBNI
-    # hasil_bris = investasi_awal * BRIS
-    # hasil_porto = investasi_awal * PORTOFOLIO
+        
+    investasi_awal = 100000000
+    hasil_bbri = investasi_awal * (1+BBRI)
+    hasil_bbni = investasi_awal * (1+BBNI)
+    hasil_bmri = investasi_awal * (1+BMRI)
+    hasil_porto = investasi_awal * (1+PORTOFOLIO)
     
     hasil_investasi = pd.DataFrame({
-        'Saham': ['BBRI', 'BBNI', 'BRIS', 'PORTOFOLIO'],
-        'Value_at_Risk (%)': [BBRI, BBNI, BRIS, PORTOFOLIO]
+        'Saham': ['BBRI', 'BBNI', 'BMRI', 'PORTOFOLIO'],
+        'Value_at_Risk (%)': [round(BBRI*100, 2), round(BBNI*100, 2), round(BMRI*100, 2), round(PORTOFOLIO*100, 2)],
+        'Hasil_Investasi @100juta': [round(hasil_bbri), round(hasil_bbni), round(hasil_bmri), round(hasil_porto)]
     })
     st.write("Tabel Hasil Investasi", hasil_investasi)
+    
