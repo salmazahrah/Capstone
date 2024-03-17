@@ -72,22 +72,38 @@ mean_bris = np.mean(returns_bris)
 iterations_bris = ((100 * z_score * std_dev_bris) / (5 * mean_bris))**2
 
 ########### Simulasi Monte Carlo
-np.random.seed(42)
-def monte_carlo_simulation_genextreme(xi, mu, beta, returns, iterations):
-    VaR = np.percentile(
-        genextreme.rvs(xi, loc=mu, scale=beta, size=(iterations, len(returns))),
-        alpha * 100,
-        axis=1
-    )
-    return np.mean(VaR)
-
 # BBRI
-BBRI = monte_carlo_simulation_genextreme(xi_bbri, mu_bbri, beta_bbri, returns_bbri, int(iterations_bbri))
+np.random.seed(42)
+VaR_bbri = np.zeros(int(iterations_bbri))
+# ES_bbri = np.zeros(int(iterations_bbri))
+for i in range(int(iterations_bbri)):
+    data_random_bbri = genextreme.rvs(xi_bbri, loc=mu_bbri, scale=beta_bbri, size=len(returns_bbri))
+    VaR_bbri[i] = np.percentile(data_random_bbri, alpha * 100)
+#     ES_bbri[i] = np.mean(data_random_bbri[data_random_bbri <= VaR_bbri[i]])    
+BBRI = np.mean(VaR_bbri)
+#     mean_ES['bbri'] = np.mean(ES_bbri)
+    
 # BBNI
-BBNI = monte_carlo_simulation_genextreme(xi_bbni, mu_bbni, beta_bbni, returns_bbni, int(iterations_bbni))
+np.random.seed(43)
+VaR_bbni = np.zeros(int(iterations_bbni))
+# ES_bbni = np.zeros(int(iterations_bbni))
+for i in range(int(iterations_bbni)):
+    data_random_bbni = genextreme.rvs(xi_bbni, loc=mu_bbni, scale=beta_bbni, size=len(returns_bbni))
+    VaR_bbni[i] = np.percentile(data_random_bbni, alpha * 100)
+#     ES_bbni[i] = np.mean(data_random_bbni[data_random_bbni <= VaR_bbni[i]])    
+BBNI = np.mean(VaR_bbni)
+#     mean_ES['bbni'] = np.mean(ES_bbni)
+    
 # BRIS
-BRIS = monte_carlo_simulation_genextreme(xi_bris, mu_bris, beta_bris, returns_bris, int(iterations_bris))
-
+np.random.seed(44)
+VaR_bris = np.zeros(int(iterations_bris))
+# ES_bris = np.zeros(int(iterations_bris))
+for i in range(int(iterations_bris)):
+    data_random_bris = genextreme.rvs(xi_bris, loc=mu_bris, scale=beta_bris, size=len(returns_bris))
+    VaR_bris[i] = np.percentile(data_random_bris, alpha * 100)
+#     ES_bris[i] = np.mean(data_random_bris[data_random_bris <= VaR_bris[i]])    
+BRIS = np.mean(VaR_bris)
+#     mean_ES['bris'] = np.mean(ES_bris)
 
 st.title("Estimasi Resiko Portofolio Saham")
 #####################################
@@ -202,8 +218,14 @@ with tab4:
 
     # Simulasi Monte Carlo
     np.random.seed(42)
-    PORTOFOLIO = monte_carlo_simulation_genextreme(xi_porto, mu_porto, beta_porto, returns_porto, int(iterations_porto))
-        
+    VaR_porto = np.zeros(int(iterations_porto))
+
+    for i in range(int(iterations_porto)):
+        data_random_porto = genextreme.rvs(xi_p, loc=mu_p, scale=beta_p, size=len(returns_porto))
+        VaR_porto[i] = np.percentile(data_random_porto, alpha * 100)
+    
+    PORTOFOLIO = np.mean(VaR_porto)
+
     # investasi_awal = 100000000
     # hasil_bbri = investasi_awal * BBRI
     # hasil_bbni = investasi_awal * BBNI
