@@ -204,15 +204,14 @@ with tab4:
     np.random.seed(42)
     PORTOFOLIO = monte_carlo_simulation_genextreme(xi_porto, mu_porto, beta_porto, returns_porto, int(iterations_porto))
         
-    investasi_awal = 100000000
-    hasil_bbri = investasi_awal * BBRI
-    hasil_bbni = investasi_awal * BBNI
-    hasil_bris = investasi_awal * BRIS
-    hasil_porto = investasi_awal * PORTOFOLIO
+    # investasi_awal = 100000000
+    # hasil_bbri = investasi_awal * BBRI
+    # hasil_bbni = investasi_awal * BBNI
+    # hasil_bris = investasi_awal * BRIS
+    # hasil_porto = investasi_awal * PORTOFOLIO
     
     hasil_investasi = pd.DataFrame({
         'Saham': ['BBRI', 'BBNI', 'BRIS', 'PORTOFOLIO'],
-        'Value_at_Risk (%)': [BBRI, BBNI, BRIS, PORTOFOLIO],
-        'Hasil_Investasi': [round(hasil_bbri), round(hasil_bbni), round(hasil_bris), round(hasil_porto)]
+        'Value_at_Risk (%)': [BBRI, BBNI, BRIS, PORTOFOLIO]
     })
     st.write("Tabel Hasil Investasi", hasil_investasi)
