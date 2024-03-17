@@ -61,15 +61,18 @@ z_score = 1.96  # Z-score untuk tingkat kepercayaan 95%
 # BBRI
 std_dev_bbri = np.std(returns_bbri)
 mean_bbri = np.mean(returns_bbri)
-iterations_bbri = ((100 * z_score * std_dev_bbri) / (5 * mean_bbri))**2
+iterations_bbri = 2*len(returns_bbri)
+# iterations_bbri = ((100 * z_score * std_dev_bbri) / (5 * mean_bbri))**2
 # BBNI
 std_dev_bbni = np.std(returns_bbni)
 mean_bbni = np.mean(returns_bbni)
-iterations_bbni = ((100 * z_score * std_dev_bbni) / (5 * mean_bbni))**2
+iterations_bbni = 2*len(returns_bbni)
+# iterations_bbni = ((100 * z_score * std_dev_bbni) / (5 * mean_bbni))**2
 # BRIS
 std_dev_bris = np.std(returns_bris)
 mean_bris = np.mean(returns_bris)
-iterations_bris = ((100 * z_score * std_dev_bris) / (5 * mean_bris))**2
+iterations_bris = 2*len(returns_bris)
+# iterations_bris = ((100 * z_score * std_dev_bris) / (5 * mean_bris))**2
 
 ########### Simulasi Monte Carlo
 np.random.seed(42)
@@ -198,7 +201,8 @@ with tab4:
     # Perhitungan iterasi
     std_dev_porto = np.std(returns_porto)
     mean_porto = np.mean(returns_porto)
-    iterations_porto = ((100 * z_score * std_dev_porto) / (5 * mean_porto))**2
+    iterations_porto = 2*len(returns_porto)
+    # iterations_porto = ((100 * z_score * std_dev_porto) / (5 * mean_porto))**2
 
     # Simulasi Monte Carlo
     np.random.seed(42)
