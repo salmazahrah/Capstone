@@ -1,8 +1,8 @@
-pip install pandas
-pip install numpy
-pip install streamlit
-pip install pandas-datareader
-pip install scipy
-pip install yfinance
-pip install altair
-pip install plotly
+pandas
+numpy
+streamlit
+pandas-datareader
+scipy
+yfinance
+altair
+plotly
