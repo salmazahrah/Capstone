@@ -21,7 +21,7 @@ with st.sidebar:
     st.write("Salma Fitria F Z")
 
 # Tentukan tanggal awal
-start_date = '2020-01-01'
+start_date = '2022-01-01'
 end_date = '2024-01-01'
 
 # Menggunakan fungsi DataReader dari yfinance
