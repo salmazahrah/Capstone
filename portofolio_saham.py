@@ -21,7 +21,7 @@ with st.sidebar:
     st.write("Salma Fitria F Z")
 
 # Tentukan tanggal awal
-start_date = '2020-01-01'
+start_date = '2022-01-01'
 end_date = '2024-01-01'
 
 # Menggunakan fungsi DataReader dari yfinance
@@ -83,7 +83,7 @@ BBNI = monte_carlo_simulation_genextreme(xi_bbni, mu_bbni, beta_bbni, returns_bb
 BMRI = monte_carlo_simulation_genextreme(xi_bmri, mu_bmri, beta_bmri, returns_bmri, int(iterations_bmri))
 
 
-st.title("Estimasi Resiko Portofolio Saham")
+st.title("Resiko Portofolio Saham")
 #####################################
 # Helper Function
 def format_big_number(num):
@@ -113,12 +113,13 @@ with tab1:
     line_chart = px.line(selected_data, x='Date', y=data, title='Grafik Harga Closing Saham Terpilih')
     st.plotly_chart(line_chart)
     
-    st.write("Statistika Deskriptif")
-    st.write(data00.describe())
+    
             
 with tab2:
-    st.write("Dailyl Returns")
-    st.write(r)
+    st.write("Daily Returns")
+    st.write(r.head())
+    st.write("Statistika Deskriptif")
+    st.write(r.describe())
     data2 = st.multiselect(
         "Pilih Saham",
         ['BBRI.JK','BBNI.JK','BMRI.JK'],
@@ -175,8 +176,8 @@ with tab3:
 with tab4:
     # Proporsi Saham pada Portofolio
     p_bbri = 0.41
-    p_bbni = 0.25
-    p_bmri = 0.34
+    p_bbni = 0.30
+    p_bmri = 0.29
     r['porto'] = ((p_bbri * r['BBRI.JK']) + (p_bbni * r['BBNI.JK']) + (p_bmri * r['BMRI.JK']))    
     returns_porto = r['porto']
 
@@ -197,7 +198,7 @@ with tab4:
     hasil_investasi = pd.DataFrame({
         'Saham': ['BBRI', 'BBNI', 'BMRI', 'PORTOFOLIO'],
         'Value_at_Risk (%)': [round(BBRI*100, 2), round(BBNI*100, 2), round(BMRI*100, 2), round(PORTOFOLIO*100, 2)],
-        'Hasil_Investasi @100juta': [round(hasil_bbri), round(hasil_bbni), round(hasil_bmri), round(hasil_porto)]
+        'Investasi @100juta': [round(hasil_bbri), round(hasil_bbni), round(hasil_bmri), round(hasil_porto)]
     })
-    st.write("Tabel Hasil Investasi", hasil_investasi)
+    st.write("Nilai Risiko dari Tingkat Pengembalian Harian Investasi", hasil_investasi)
     
