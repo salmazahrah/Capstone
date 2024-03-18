@@ -112,8 +112,7 @@ with tab1:
     selected_data = data00[data].reset_index()
     line_chart = px.line(selected_data, x='Date', y=data, title='Grafik Harga Closing Saham Terpilih')
     st.plotly_chart(line_chart)
-    
-    
+        
             
 with tab2:
     st.write("Daily Returns")
