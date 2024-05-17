@@ -96,7 +96,7 @@ def format_big_number(num):
         return f"{num:.2f}"
     
 ###### Tabbing plot saham
-tab1, tab2, tab3, tab4 = st.tabs(['Saham','Daily Return', 'Matriks Korelasi', 'Simulasi'])
+tab1, tab2, tab3= st.tabs(['Saham','Daily Return', 'Matriks Korelasi'])
 
 with tab1:
     with st.expander("Data Harga Closing Saham"):
@@ -172,32 +172,32 @@ with tab3:
         Dengan menggunakan matriks korelasi, kita dapat melihat bahwa ketiga saham memiliki korelasi positif yang kuat
     """)    
     
-with tab4:
-    # Proporsi Saham pada Portofolio
-    p_bbri = 0.41
-    p_bbni = 0.30
-    p_bmri = 0.29
-    r['porto'] = ((p_bbri * r['BBRI.JK']) + (p_bbni * r['BBNI.JK']) + (p_bmri * r['BMRI.JK']))    
-    returns_porto = r['porto']
+# with tab4:
+#     # Proporsi Saham pada Portofolio
+#     p_bbri = 0.41
+#     p_bbni = 0.30
+#     p_bmri = 0.29
+#     r['porto'] = ((p_bbri * r['BBRI.JK']) + (p_bbni * r['BBNI.JK']) + (p_bmri * r['BMRI.JK']))    
+#     returns_porto = r['porto']
 
-    gev_params_mle_porto = genextreme.fit(returns_porto)
-    xi_porto, mu_porto, beta_porto = gev_params_mle_porto
-    iterations_porto = 2*len(returns_porto)
+#     gev_params_mle_porto = genextreme.fit(returns_porto)
+#     xi_porto, mu_porto, beta_porto = gev_params_mle_porto
+#     iterations_porto = 2*len(returns_porto)
 
-    # Simulasi Monte Carlo
-    np.random.seed(42)
-    PORTOFOLIO = monte_carlo_simulation_genextreme(xi_porto, mu_porto, beta_porto, returns_porto, int(iterations_porto))
+#     # Simulasi Monte Carlo
+#     np.random.seed(42)
+#     PORTOFOLIO = monte_carlo_simulation_genextreme(xi_porto, mu_porto, beta_porto, returns_porto, int(iterations_porto))
         
-    investasi_awal = 100000000
-    hasil_bbri = investasi_awal * (1+BBRI)
-    hasil_bbni = investasi_awal * (1+BBNI)
-    hasil_bmri = investasi_awal * (1+BMRI)
-    hasil_porto = investasi_awal * (1+PORTOFOLIO)
+#     investasi_awal = 100000000
+#     hasil_bbri = investasi_awal * (1+BBRI)
+#     hasil_bbni = investasi_awal * (1+BBNI)
+#     hasil_bmri = investasi_awal * (1+BMRI)
+#     hasil_porto = investasi_awal * (1+PORTOFOLIO)
     
-    hasil_investasi = pd.DataFrame({
-        'Saham': ['BBRI', 'BBNI', 'BMRI', 'PORTOFOLIO'],
-        'Value_at_Risk (%)': [round(BBRI*100, 2), round(BBNI*100, 2), round(BMRI*100, 2), round(PORTOFOLIO*100, 2)],
-        'Investasi @100juta': [round(hasil_bbri), round(hasil_bbni), round(hasil_bmri), round(hasil_porto)]
-    })
-    st.write("Nilai Risiko dari Tingkat Pengembalian Harian Investasi", hasil_investasi)
+#     hasil_investasi = pd.DataFrame({
+#         'Saham': ['BBRI', 'BBNI', 'BMRI', 'PORTOFOLIO'],
+#         'Value_at_Risk (%)': [round(BBRI*100, 2), round(BBNI*100, 2), round(BMRI*100, 2), round(PORTOFOLIO*100, 2)],
+#         'Investasi @100juta': [round(hasil_bbri), round(hasil_bbni), round(hasil_bmri), round(hasil_porto)]
+#     })
+#     st.write("Nilai Risiko dari Tingkat Pengembalian Harian Investasi", hasil_investasi)
     
