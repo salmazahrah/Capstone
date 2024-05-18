@@ -44,46 +44,46 @@ returns_bbri = r['BBRI.JK']
 returns_bbni = r['BBNI.JK']
 returns_bmri = r['BMRI.JK']
     
-########## Perhitungan Parameter
-# BBRI
-gev_bbriarams_mle_bbri = genextreme.fit(returns_bbri)
-xi_bbri, mu_bbri, beta_bbri = gev_bbriarams_mle_bbri
-# BBNI
-gev_bbniarams_mle_bbni = genextreme.fit(returns_bbni)
-xi_bbni, mu_bbni, beta_bbni = gev_bbniarams_mle_bbni
-# BMRI
-gev_bmriarams_mle_bmri = genextreme.fit(returns_bmri)
-xi_bmri, mu_bmri, beta_bmri = gev_bmriarams_mle_bmri
+# ########## Perhitungan Parameter
+# # BBRI
+# gev_bbriarams_mle_bbri = genextreme.fit(returns_bbri)
+# xi_bbri, mu_bbri, beta_bbri = gev_bbriarams_mle_bbri
+# # BBNI
+# gev_bbniarams_mle_bbni = genextreme.fit(returns_bbni)
+# xi_bbni, mu_bbni, beta_bbni = gev_bbniarams_mle_bbni
+# # BMRI
+# gev_bmriarams_mle_bmri = genextreme.fit(returns_bmri)
+# xi_bmri, mu_bmri, beta_bmri = gev_bmriarams_mle_bmri
 
-########## Perhitungan iterasi
-alpha = 0.05
-# z_score = 1.96  # Z-score untuk tingkat kepercayaan 95%
-# BBRI
-iterations_bbri = 2*len(returns_bbri)
-# BBNI
-iterations_bbni = 2*len(returns_bbni)
-# BMRI
-iterations_bmri = 2*len(returns_bmri)
+# ########## Perhitungan iterasi
+# alpha = 0.05
+# # z_score = 1.96  # Z-score untuk tingkat kepercayaan 95%
+# # BBRI
+# iterations_bbri = 2*len(returns_bbri)
+# # BBNI
+# iterations_bbni = 2*len(returns_bbni)
+# # BMRI
+# iterations_bmri = 2*len(returns_bmri)
 
-########### Simulasi Monte Carlo
-np.random.seed(42)
-def monte_carlo_simulation_genextreme(xi, mu, beta, returns, iterations):
-    VaR = np.percentile(
-        genextreme.rvs(xi, loc=mu, scale=beta, size=(iterations, len(returns))),
-        alpha * 100,
-        axis=1
-    )
-    return np.mean(VaR)
+# ########### Simulasi Monte Carlo
+# np.random.seed(42)
+# def monte_carlo_simulation_genextreme(xi, mu, beta, returns, iterations):
+#     VaR = np.percentile(
+#         genextreme.rvs(xi, loc=mu, scale=beta, size=(iterations, len(returns))),
+#         alpha * 100,
+#         axis=1
+#     )
+#     return np.mean(VaR)
 
-# BBRI
-BBRI = monte_carlo_simulation_genextreme(xi_bbri, mu_bbri, beta_bbri, returns_bbri, int(iterations_bbri))
-# BBNI
-BBNI = monte_carlo_simulation_genextreme(xi_bbni, mu_bbni, beta_bbni, returns_bbni, int(iterations_bbni))
-# BMRI
-BMRI = monte_carlo_simulation_genextreme(xi_bmri, mu_bmri, beta_bmri, returns_bmri, int(iterations_bmri))
+# # BBRI
+# BBRI = monte_carlo_simulation_genextreme(xi_bbri, mu_bbri, beta_bbri, returns_bbri, int(iterations_bbri))
+# # BBNI
+# BBNI = monte_carlo_simulation_genextreme(xi_bbni, mu_bbni, beta_bbni, returns_bbni, int(iterations_bbni))
+# # BMRI
+# BMRI = monte_carlo_simulation_genextreme(xi_bmri, mu_bmri, beta_bmri, returns_bmri, int(iterations_bmri))
 
 
-st.title("Resiko Portofolio Saham")
+st.title("Portofolio Saham")
 #####################################
 # Helper Function
 def format_big_number(num):
