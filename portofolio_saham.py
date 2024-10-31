@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 st.set_page_config(layout='wide')
 
 # Aktifkan Streamlit debug mode
-st.set_option('deprecation.showPyplotGlobalUse', False)
+# st.set_option('deprecation.showPyplotGlobalUse', False)
 
 with st.sidebar:
     st.subheader("Penulis")
